@@ -10,7 +10,7 @@ dotenv.config()
 
 
 // const token = process.env.TOKEN;
-const token = '7068981084:AAH0GZcT6-E70Q5GOX-2iZHV9bPzy3Q_iwQ'
+// const token = '7068981084:AAH0GZcT6-E70Q5GOX-2iZHV9bPzy3Q_iwQ'
 const bot = new TelegramBot(token, { polling: true });
 
 
