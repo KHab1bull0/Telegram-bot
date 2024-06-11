@@ -5,6 +5,25 @@ import fs from 'node:fs';
 import { findAll, findByChatId, register } from "./services/user.js";
 import { connectMongodb } from "./config/db.js";
 import { match } from "node:assert";
+import ffmpeg from 'fluent-ffmpeg';
+
+// // Video faylning yo'li
+const videoPath = './photo/auto.mp4';
+
+// Video haqida ma'lumot olish
+// ffmpeg.ffprobe(videoPath, (err, metadata) => {
+//     if (err) {
+//         console.error('Xatolik:', err);
+//         return;
+//     }
+
+//     console.log('Video haqida ma\'lumot:');
+//     console.log('Format:', metadata.format.format_name);
+//     console.log('Davomiyligi:', metadata.format.duration, 'soniya');
+//     console.log('Kengligi:', metadata.streams[0].width);
+//     console.log('Balandligi:', metadata.streams[0].height);
+// });
+
 
 
 dotenv.config()
@@ -67,10 +86,13 @@ const contactbtns = {
 const btns = {
     reply_markup: {
         keyboard: [
-            
+
             [
                 {
                     text: "Test"
+                },
+                {
+                    text: "Video"
                 }
             ],
         ],
@@ -98,54 +120,106 @@ export const contactbtn = {
 
 connectMongodb()
 
+bot.on('polling_error', (error) => {
+    console.log('Polling error:', error.code, error.message);
+    // Retry logic
+    setTimeout(() => {
+        bot.startPolling();
+    }, 5000); // 5 seconds delay
+});
+
 const start = async () => {
 
-     bot.onText('users', async (msg) => {
-        const chatId = msg.from.id
+    bot.onText(/\/start/, (msg) => {
+        const chatId = msg.chat.id;
+        const username = msg.chat.username;
+        const text = msg.text;
 
-        const AllUser = await findAll();
-        for (let i = 0; i < AllUser.length; i++) {
-            bot.sendMessage(chatId,
-                `${i + 1}. ChatId: ${AllUser[i].chatId}\n
-firstname: ${AllUser[i].first_name}\n
-Username: ${AllUser[i].username}`);
-        };
+        if (text === '/start') {
+            return bot.sendMessage(chatId, `Assalomu alaykum ${username}  👋
+Botimizga xush kelibsiz 🎉
+Kontaktingizni  📱  yuboring!  (Yuborish uchun tugmani bosing ⬇️)`, contactbtn);
+        }
+
     });
+
+
+
+//     bot.onText('users', async (msg) => {
+//         const chatId = msg.from.id
+
+//         const AllUser = await findAll();
+//         for (let i = 0; i < AllUser.length; i++) {
+//             bot.sendMessage(chatId,
+//                 `${i + 1}. ChatId: ${AllUser[i].chatId}\n
+// firstname: ${AllUser[i].first_name}\n
+// Username: ${AllUser[i].username}`);
+//         };
+//     });
 
     bot.on('message', async (msg) => {
         const chatId = msg.chat.id;
         const chatIdshavkat = 2010155328
         const chatIdabduvohid = 5352461835
         const chatIdbexruz = 1302939620
-        
+        const chatIdOybek = 5430738786
+        const chatIdBot = 6824503053
+
         const text = msg.text;
         const username = msg.chat.username;
         const messageId = msg.message_id
         const first_name = msg.chat.first_name;
         const last_name = msg.chat.last_name
         const location = msg.location;
-       
-        console.log(msg);
+        console.log(chatId)
 
-        
 
-        if (text === '/userlar_soni') {
-            const AllUser = await findAll();
-            return bot.sendMessage(chatId, AllUser.length);
-        };
 
-        if (text === '/start') {
-            return bot.sendMessage(chatId, `Assalomu alaykum ${username}  👋
-Botimizga xush kelibsiz 🎉
-Kontaktingizni  📱  yuboring!  (Yuborish uchun tugmani bosing ⬇️)`, contactbtn);
-          }
-        if (text) {
-            bot.sendMessage(chatIdshavkat, text);
-            // bot.sendMessage(chatIdabduvohid, text);
-            // bot.sendMessage(chatIdbexruz, text);
-            // bot.deleteMessage(chatId, messageId);
-        };
+        // bot.sendMessage(chatIdBot, text);
+
+        //         if (text === '/userlar_soni') {
+        //             const AllUser = await findAll();
+        //             return bot.sendMessage(chatId, AllUser.length);
+        //         };
+
+
+        console.log(text);
+
+        if (text == 'Video') {
+            // HTML formatida xabar yuborish
+            const htmlMessage = `
+        <b>Assalomu alaykum!</b>
+<i>Bu HTML formatida yozilgan xabar.</i>
+<a href="https://www.example.com">Havola</a>
+    `;
+
+            bot.sendMessage(chatId, htmlMessage, { parse_mode: 'HTML' });
+            const videoUrl = './photo/jam.mp4';
+            const caption = `<b> BlackCars </b>
+<a href="https://www.instagram.com/blackcarsuz/"> BlackCars.uz </a>`;
+
+            const options = {
+                caption: caption,
+                parse_mode: "HTML",
+                width: 1080,
+                height: 1920
+            };
+
+            bot.sendVideo(chatId, videoUrl, options)
+                .then(() => {
+                    console.log('Video yuborildi');
+                })
+                .catch((error) => {
+                    console.error('Video yuborishda xatolik:', error);
+                });;
+        }
+
+        // bot.sendMessage(chatId, text || '.')
+
     });
+
+
+
 
     bot.on('contact', async (msg) => {
         const chatId = msg.chat.id;
@@ -160,7 +234,7 @@ Kontaktingizni  📱  yuboring!  (Yuborish uchun tugmani bosing ⬇️)`, contac
         };
 
 
-        bot.sendMessage(chatId, `${first_name} you have been hacked 😈`)
+        bot.sendMessage(chatId, 'Botga xush kelibsiz', btns);
     })
 
 
