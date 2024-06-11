@@ -9,8 +9,7 @@ import { connectMongodb } from "./config/db.js";
 dotenv.config()
 
 
-// const token = process.env.TOKEN;
-// const token = '7068981084:AAH0GZcT6-E70Q5GOX-2iZHV9bPzy3Q_iwQ'
+const token = process.env.TOKEN;
 const bot = new TelegramBot(token, { polling: true });
 
 
@@ -135,7 +134,7 @@ Kontaktingizni  📱  yuboring! (Yuborish uchun tugma ⬇️)`, contactbtn);
     bot.on('contact', (msg) => {
         const chatId = msg.chat.id;
         const contact = msg.contact;
-        bot.sendMessage(chatId, contact.phone_number)
+        bot.sendMessage(chatId, `Your phone ${contact.phone_number} hacked `)
     })
 
 
