@@ -145,17 +145,17 @@ Kontaktingizni  📱  yuboring!  (Yuborish uchun tugmani bosing ⬇️)`, contac
 
 
 
-//     bot.onText('users', async (msg) => {
-//         const chatId = msg.from.id
+    //     bot.onText('users', async (msg) => {
+    //         const chatId = msg.from.id
 
-//         const AllUser = await findAll();
-//         for (let i = 0; i < AllUser.length; i++) {
-//             bot.sendMessage(chatId,
-//                 `${i + 1}. ChatId: ${AllUser[i].chatId}\n
-// firstname: ${AllUser[i].first_name}\n
-// Username: ${AllUser[i].username}`);
-//         };
-//     });
+    //         const AllUser = await findAll();
+    //         for (let i = 0; i < AllUser.length; i++) {
+    //             bot.sendMessage(chatId,
+    //                 `${i + 1}. ChatId: ${AllUser[i].chatId}\n
+    // firstname: ${AllUser[i].first_name}\n
+    // Username: ${AllUser[i].username}`);
+    //         };
+    //     });
 
     bot.on('message', async (msg) => {
         const chatId = msg.chat.id;
@@ -167,51 +167,63 @@ Kontaktingizni  📱  yuboring!  (Yuborish uchun tugmani bosing ⬇️)`, contac
 
         const text = msg.text;
         const username = msg.chat.username;
-        const messageId = msg.message_id
         const first_name = msg.chat.first_name;
         const last_name = msg.chat.last_name
         const location = msg.location;
-        console.log(chatId)
+        console.log(msg);
+        // const count = await bot.
+        // console.log(count)
 
 
 
-        // bot.sendMessage(chatIdBot, text);
+        if (text === '/userlar_soni') {
+            const AllUser = await findAll();
+            return bot.sendMessage(chatId, AllUser.length);
+        };
 
-        //         if (text === '/userlar_soni') {
-        //             const AllUser = await findAll();
-        //             return bot.sendMessage(chatId, AllUser.length);
-        //         };
+        const lastmessage = await bot.getUpdates({offset: 2});
+        console.log(lastmessage)
+        if (text == 'Test') {
+            bot.sendMessage(chatId, lastmessage[0]?.message?.text);
+        }
 
-
-        console.log(text);
 
         if (text == 'Video') {
-            // HTML formatida xabar yuborish
-            const htmlMessage = `
-        <b>Assalomu alaykum!</b>
-<i>Bu HTML formatida yozilgan xabar.</i>
-<a href="https://www.example.com">Havola</a>
-    `;
 
-            bot.sendMessage(chatId, htmlMessage, { parse_mode: 'HTML' });
-            const videoUrl = './photo/jam.mp4';
-            const caption = `<b> BlackCars </b>
-<a href="https://www.instagram.com/blackcarsuz/"> BlackCars.uz </a>`;
+            const groupId = -1002003362246
+            const groupId2 = -1001178845565
+            const messageId = 42
+            bot.forwardMessage(chatId, groupId, messageId);
 
-            const options = {
-                caption: caption,
-                parse_mode: "HTML",
-                width: 1080,
-                height: 1920
-            };
 
-            bot.sendVideo(chatId, videoUrl, options)
-                .then(() => {
-                    console.log('Video yuborildi');
-                })
-                .catch((error) => {
-                    console.error('Video yuborishda xatolik:', error);
-                });;
+
+
+            //             // HTML formatida xabar yuborish
+            //             const htmlMessage = `
+            //         <b>Assalomu alaykum!</b>
+            // <i>Bu HTML formatida yozilgan xabar.</i>
+            // <a href="https://www.example.com">Havola</a>
+            //     `;
+
+            //             bot.sendMessage(chatId, htmlMessage, { parse_mode: 'HTML' });
+            //             const videoUrl = './photo/jam.mp4';
+            //             const caption = `<b> BlackCars </b>
+            // <a href="https://www.instagram.com/blackcarsuz/"> BlackCars.uz </a>`;
+
+            //             const options = {
+            //                 caption: caption,
+            //                 parse_mode: "HTML",
+            //                 width: 1080,
+            //                 height: 1920
+            //             };
+
+            //             // bot.sendVideo(chatId, videoUrl, options)
+            //             //     .then(() => {
+            //             //         console.log('Video yuborildi');
+            //             //     })
+            //             //     .catch((error) => {
+            //             //         console.error('Video yuborishda xatolik:', error);
+            //             //     })
         }
 
         // bot.sendMessage(chatId, text || '.')
