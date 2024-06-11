@@ -15,6 +15,9 @@ const userSchema = new Schema({
     chat_type: {
         type: String
     },
+    phone_number: {
+        type: String
+    },
     joined_At: {
         type: Date,
         default: Date.now
