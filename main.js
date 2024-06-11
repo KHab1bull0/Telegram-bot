@@ -4,6 +4,7 @@ import dotenv from 'dotenv';
 import fs from 'node:fs';
 import { findAll, findByChatId, register } from "./services/user.js";
 import { connectMongodb } from "./config/db.js";
+import { match } from "node:assert";
 
 
 dotenv.config()
@@ -14,19 +15,19 @@ const bot = new TelegramBot(token, { polling: true });
 
 
 
-bot.setMyCommands([
-    {
-        command: "/start",
-        description: "Qayta ishga tushirish"
-    },
-    {
-        command: "/info",
-        description: "Bot haqida malumot olish"
-    }, {
-        command: "/userlar_soni",
-        description: "User sonini ko'rish"
-    }
-]);
+// bot.setMyCommands([
+//     {
+//         command: "/start",
+//         description: "Qayta ishga tushirish"
+//     },
+//     {
+//         command: "/info",
+//         description: "Bot haqida malumot olish"
+//     }, {
+//         command: "/userlar_soni",
+//         description: "User sonini ko'rish"
+//     }
+// ]);
 
 
 
@@ -96,6 +97,19 @@ export const contactbtn = {
 connectMongodb()
 
 const start = async () => {
+
+    bot.onText('a', (msg, match) => {
+        const chatId  = msg.chat.id
+        bot.sendMessage(chatId, "salom")
+    })
+
+
+    bot.onText('b', (msg, match) => {
+        const chatId  = msg.chat.id
+        bot.sendMessage(chatId, "salom")
+    })
+
+
     bot.on('message', async (msg) => {
         const chatId = msg.chat.id;
         const messageId = msg.message_id
